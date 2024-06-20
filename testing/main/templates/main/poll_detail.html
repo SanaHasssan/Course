@@ -1,0 +1,125 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Опрос{% endblock %}
+
+{% block content %}
+<style>
+    /* Пример стилей */
+
+
+    .poll-question {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .poll-options {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .poll-option {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .poll-option:hover {
+        background-color: #e0e0e0;
+    }
+
+    .poll-results {
+        margin-top: 30px;
+    }
+
+    .poll-results-heading {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+     body {
+        padding-bottom: 60px; /* Высота футера */
+    }
+
+    .poll-container {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 70px; /* Учтем высоту графика и отступ от футера */
+    }
+
+    .poll-chart {
+        width: 100%; /* Растягиваем график на всю ширину */
+        max-width: 600px; /* Ограничиваем максимальную ширину графика, если это необходимо */
+        margin: 0 auto;
+    }
+        .footer__container {
+        display: none; /* Скрываем футер */
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="poll-container">
+    <h2 class="poll-question">{{ poll.question_text }}</h2>
+
+    {% if can_vote %}
+        <form method="post" action="{% url 'submit_poll' poll.id %}">
+            {% csrf_token %}
+            <div class="poll-options">
+                {% for choice in poll.choice_set.all %}
+                    <button class="poll-option" type="submit" name="choice" value="{{ choice.id }}">{{ choice.choice_text }}</button>
+                {% endfor %}
+            </div>
+        </form>
+    {% else %}
+        <p>Вы уже ответили на этот опрос.</p>
+    {% endif %}
+
+    {% if not can_vote %}
+        <div class="poll-results">
+            <h3 class="poll-results-heading">Результаты опроса:</h3>
+            {% for choice in poll.choice_set.all %}
+                <p>{{ choice.choice_text }} - {{ choice.votes }}</p>
+            {% empty %}
+                <p>Нет доступных вариантов ответов.</p>
+            {% endfor %}
+
+            <p>Общее количество голосов: {{ total_votes }}</p>
+
+            <canvas id="poll-chart" class="poll-chart"></canvas>
+        </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var labels = [{% for label in labels %}"{{ label }}", {% endfor %}];
+        var ctx = document.getElementById('poll-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Голоса',
+                    data: [{% for choice in poll.choice_set.all %}{{ choice.votes }},{% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

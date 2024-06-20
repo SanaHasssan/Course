@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="background-color: #e7f3ff;">
+    <div class="row">
+        <div class="col-12 col-lg-6 mx-auto">
+            <h2 class="text-center mb-4">Список тестов</h2>
+            <hr>
+            {% if request.user.is_authenticated and user.is_superuser %}
+            <a href="{% url 'new_test' block_name %}" class="btn btn-primary mb-4">
+                Создать тест
+            </a>
+            {% endif %}
+            {% for el in test %}
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <a href="{% url 'test' el.NAME.id %}">
+                        <h5 class="card-title">{{ el.NAME.NAME }}</h5>
+                        <p class="card-text">Попыток: {{ el.HP }}</p>
+                    </a>
+                    {% if request.user.is_authenticated and user.is_superuser %}
+                    <form action="{% url 'delete_test' el.NAME.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить тест</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endfor %}
+            <a href="{% url 'home' %}" class="btn btn-secondary mb-4">
+                Назад
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

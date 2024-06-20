@@ -1,0 +1,114 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Создание теста {% endblock %}
+
+{% block content%}
+<style>
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+form {
+  width: 50%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-left: 35px;
+  margin-bottom: 150px;
+}
+
+/* Увеличить размер текстовых полей */
+form input[type=text],
+form textarea {
+  font-size: 18px;
+  padding: 15px;
+}
+
+/* Убрать стандартный фон у кнопки */
+form button[type=submit] {
+  background: none;
+  border: none;
+}
+
+/* Добавить фон и стили при наведении на кнопку */
+form button[type=submit]:hover {
+  background: 00#7bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Убрать рамку у текстовых полей при фокусе */
+form input:focus,
+form textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Добавить отступы между элементами формы */
+form p {
+  margin: 10px 0;
+}
+
+/* Изменить стили для заголовков формы */
+form legend {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Изменить стили для подписей полей формы */
+form label {
+  font-size: 20px;
+}
+
+/* Изменить цвет рамки у текстовых полей при ошибке */
+form input:invalid,
+form textarea:
+invalid {
+border: 1px solid red;
+}
+
+/* Добавить стиль для сообщений об ошибках */
+form .errorlist {
+color: red;
+margin: 0;
+margin-top: 10px;
+padding: 0;
+list-style: none;
+}
+
+/* Изменить стили для кнопки "Создать" */
+form button[type=submit] {
+background-color: #007bff;
+color: #fff;
+font-size: 20px;
+padding: 10px 20px;
+border-radius: 5px;
+margin-top: 20px;
+align-items: center;
+justify-content: center;
+position: relative;
+left: 0%;
+transform: translate(-10%, 0);
+}
+
+
+</style>
+<div class="content">
+    <form method="post">
+        {% csrf_token %}
+        <legend>Создание теста</legend>
+        {{ form.as_p}}
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

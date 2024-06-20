@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="icon" type="image/png" href="https://it-cube.ficto.ru/assets/data/logo/kub-static.svg">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <title>{% block title%}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <style>
+/* Demo Background */
+body{background:url(/images/bg/bg-6.png)}
+
+/* Form Style */
+.form-horizontal{
+ background: #fff;
+ padding-bottom: 40px;
+ border-radius: 15px;
+ text-align: center;
+}
+.form-horizontal .heading{
+ display: block;
+ font-size: 35px;
+ font-weight: 700;
+ padding: 35px 0;
+ border-bottom: 1px solid #f0f0f0;
+ margin-bottom: 30px;
+}
+.form-horizontal .form-group{
+ padding: 0 40px;
+ margin: 0 0 25px 0;
+ position: relative;
+}
+.form-horizontal .form-control{
+ background: #f0f0f0;
+ border: none;
+ border-radius: 20px;
+ box-shadow: none;
+ padding: 0 20px 0 45px;
+ height: 40px;
+ transition: all 0.3s ease 0s;
+}
+.form-horizontal .form-control:focus{
+ background: #e0e0e0;
+ box-shadow: none;
+ outline: 0 none;
+}
+.form-horizontal .form-group i{
+ position: absolute;
+ top: 12px;
+ left: 60px;
+ font-size: 17px;
+ color: #c8c8c8;
+ transition : all 0.5s ease 0s;
+}
+.form-horizontal .form-control:focus + i{
+ color: #fff;
+}
+.form-horizontal .fa-question-circle{
+ display: inline-block;
+ position: absolute;
+ top: 12px;
+ right: 60px;
+ font-size: 20px;
+ color: #808080;
+ transition: all 0.5s ease 0s;
+}
+.form-horizontal .fa-question-circle:hover{
+ color: #000;
+}
+.form-horizontal .main-checkbox{
+ float: left;
+ width: 20px;
+ height: 20px;
+ background: #11a3fc;
+ border-radius: 50%;
+ position: relative;
+ margin: 5px 0 0 5px;
+ border: 1px solid #11a3fc;
+}
+.form-horizontal .main-checkbox label{
+ width: 20px;
+ height: 20px;
+ position: absolute;
+ top: 0;
+ left: 0;
+ cursor: pointer;
+}
+.form-horizontal .main-checkbox label:after{
+ content: "";
+ width: 10px;
+ height: 5px;
+ position: absolute;
+ top: 5px;
+ left: 4px;
+ border: 3px solid #fff;
+ border-top: none;
+ border-right: none;
+ background: transparent;
+ opacity: 0;
+ -webkit-transform: rotate(-45deg);
+ transform: rotate(-45deg);
+}
+.form-horizontal .main-checkbox input[type=checkbox]{
+ visibility: hidden;
+}
+.form-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+ opacity: 1;
+}
+.form-horizontal .text{
+ float: left;
+ margin-left: 7px;
+ line-height: 20px;
+ padding-top: 5px;
+ text-transform: capitalize;
+}
+.form-horizontal .btn{
+ float: right;
+ font-size: 14px;
+ color: #fff;
+ background: #00b4ef;
+ border-radius: 30px;
+ padding: 10px 25px;
+ border: none;
+ text-transform: capitalize;
+ transition: all 0.5s ease 0s;
+}
+@media only screen and (max-width: 479px){
+ .form-horizontal .form-group{
+ padding: 0 25px;
+ }
+ .form-horizontal .form-group i{
+ left: 45px;
+ }
+ .form-horizontal .btn{
+ padding: 10px 20px;
+ }
+}
+
+.container{
+position:absolute;
+left:20%;
+top:20%;
+        display:inline-block;
+}
+
+
+
+
+
+
+    </style>
+    <style>
+img {
+  display: block; /* Чтобы центрировать изображение по горизонтали */
+  margin: 0 auto; /* Чтобы центрировать изображение по горизонтали */
+  width: 30%; /* Установка ширины изображения на 50% от родительского контейнера */
+  height: auto; /* Автоматическое подстраивание высоты изображения */
+}
+
+        .menu {
+            background-color:#D4DEE6;
+
+            margin-top:0px;
+            width: 100%;
+            height: 120px;
+
+
+
+        }
+        .content{
+            background-color:#1Е90FF;
+            height: 100vmin;
+            margin-top:15px;
+            width: 100%;
+
+            left: 0px;
+
+        }
+.menu {
+  display: flex;
+  align-items: center;
+  height: 60px;
+
+  border: 1px solid #16354D;
+  border-radius: 12px;
+  padding: 0 2.5%;
+}
+
+#homs,
+#materials,
+#reiting,
+#res,
+#tasks{
+   margin-left:10px;
+  width: 160px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border:blue solid 1px;
+  text-shadow: 1px 1px 1px #000;
+  font-size: 20px;
+
+}
+
+.last.cnops {
+  display: flex;
+  width: 360px;
+  height:60px;
+  justify-content: left;
+  align-items: center;
+  color: #000000;
+  text-shadow: 1px 1px 1px #000;
+ font-size: 16px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+
+}
+
+.cnops {
+  display: flex;
+  justify-content: flex-end;
+  margin-left:28%;
+    font-size: 20px;
+
+}
+body {
+  min-width: 900px; /* устанавливаем минимальную ширину страницы в 320px */
+    min-height: 700px; /* устанавливаем минимальную ширину страницы в 320px */
+
+}
+
+
+.btms {
+  height:50px;
+  width: 125px;
+  right: 10px;
+  top: -15px;
+  margin-left:30px;
+    margin-right:5px;
+
+}
+
+.homs {
+  font-size: 25px;
+}
+
+#logout {
+
+  border: 2px solid blue;
+}
+
+
+#bz {  height:50px;
+  width: 125px;
+  right: 10px;
+  top: -25px;}
+
+
+#loc {
+  margin-top: 20px;
+}
+
+h3 { font-size: 20px;}
+
+a {
+  text-decoration: none;
+}
+   .guide{
+        background:#D2D2D4;
+        height: 25%;
+        width: 15%;
+        left:2.5%;
+        border: 1px solid #0C151C;
+        display:inline-block;
+        font-size:30px;
+        text-align: center;
+        border-radius:12px;
+        color:#0C151C!important;
+        text-shadow: 1px 1px 1px #000;
+        margin-left: 28px;
+        margin-top: 28px;
+          float: left;
+  margin-right: 10px; /* добавляем отступ между блоками */
+        }
+       #creater{background: #6B99C3;
+       color:#fff!important;
+       }
+
+        .slideT{background:#6B99C3;
+               border-radius:12px;
+               font-size:20px;
+               text-align:center;
+               }
+        .container2{
+                display:inline-block;
+                margin-left:10px;
+                height: 10%;
+                width: 25%;
+}
+
+
+.strip {
+  background-color: #f0f0f0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  clear: both;
+  margin-top: 50px; /* добавляем отступ сверху */
+}
+
+
+.strip h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+.inp{
+position: absolute; bottom: 40px; left:30%; height:30px;
+border:1px solid;
+border-radius:12px;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  background-color: #800080;
+        }
+.inp2{
+position: absolute; bottom: 4px; left:18%; height:30px;
+border:1px solid;
+border-radius:12px;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  background-color: #800080;
+        }
+
+
+
+
+
+
+    </style>
+</head>
+
+
+<body>
+<style>
+    /* стили для кнопок */
+    .btn-menu {
+        border: 2px solid #007bff;
+        color: #007bff;
+        padding: 10px 25px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+    .btn-menu:hover, .btn-menu.active {
+        background-color: #fff;
+        color: black;
+    }
+
+    /* стили для логотипа */
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    /* стили для имени пользователя */
+    .user {
+        color: #007bff;
+        font-size: 20px;
+    }
+
+    /* стили для блока с именем пользователя, кнопкой входа и регистрации */
+    .user-block {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    /* стили для кнопок входа и регистрации */
+    .btn-login {
+        border: 2px solid #007bff;
+        color: #007bff;
+        padding: 10px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+    .btn-login:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* новые стили для шапки */
+    .navbar {
+        background-color: #007bff;
+    }
+
+    .navbar-nav .active .nav-link {
+        background-color: #007bff;
+        color: #007bff;
+    }
+    .btn-menu.active {
+      background-color: #007bff;
+      color: #fff !important;
+      border-color: #fff;
+    }
+
+    .navbar-dark{
+    background: #fff!important;
+    }
+
+</style>
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-4 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/' %} active{% endif %}" href="{% url 'home' %}">Тесты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/guide' %} active{% endif %}"
+                       href="{% url 'guide' %}">Справочники</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/result' %} active{% endif %}"
+                       href="{% url 'result' %}">Результаты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/TZ' %} active{% endif %}" href="{% url 'TZ' %}">Задания</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/rating' %} active{% endif %}"
+                       href="{% url 'rating' %}">Рейтинг</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/polls/' %} active{% endif %}"
+                       href="{% url 'poll_list' %}">Опрос</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-menu {% if request.path == '/Infor' %} active{% endif %}"
+                       href="{% url 'Infor' %}">О нас</a>
+                </li>
+            </ul>
+            {% if request.user.is_authenticated %}
+            <div class="user-block">
+                <span class="user">{{ request.user.username }}</span>
+                <a class="btn-login" href="{% url 'logout' %}">Выйти</a>
+            </div>
+            {% else %}
+            <div class="user-block">
+                <a class="btn-login" href="{% url 'login' %}">Войти</a>
+                <a class="btn-login" href="{% url 'register' %}">Регистрация</a>
+            </div>
+
+            {% endif %}
+        </div>
+
+    </div>
+</nav>
+<hr>
+
+            <div class="content">
+                {% block content%}{% endblock %}
+            </div>
+
+
+</body>
+</html>
+

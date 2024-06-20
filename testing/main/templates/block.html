@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block title%} {{title}} {% endblock %}
+
+{% block content%}
+
+{% if request.user.is_authenticated and user.is_superuser %}
+
+
+<a href="{% url 'new_test' %}">
+    <div id="creater" class="guide">
+        <h6 class="homs">&#9997 </h6>
+        СОЗДАТЬ ТЕСТ
+
+    </div>
+</a>
+
+{% for el in test %}
+
+<a class="guide pointer nav-link link-dark" style="position: relative;" href="{% url 'test' el.NAME.id %}">
+    <h5 class="homs">{{el.NAME.NAME}}</h5>
+    <br>
+    Попыток: {{ el.HP }}
+
+    <form action="{% url 'delete_test' el.NAME.id %}" method="post">
+        {% csrf_token %}
+        <input class="inp" type="submit" value="Удалить">
+    </form>
+
+</a>
+
+{% endfor %}
+
+
+{% elif request.user.is_authenticated %}
+{% for el in test %}
+
+<a class="guide pointer nav-link link-dark" style="position: relative;" href="{% url 'test' el.NAME.id %}">
+    <h5 class="homs">{{el.NAME.NAME}}</h5>
+    <br>
+    Попыток: {{ el.HP }}
+
+</a>
+
+
+{% endfor %}
+
+{% else %}
+<div class="container3">
+    <div class="guide pointer">
+        <h5 class="homs">Для просмотра тестов нужно войти в систему</h5>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'main/base.html' %}
+
+{% block title%} {{title}} {% endblock %}
+
+{% block content%}
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="container-fluid bg-primary py-3">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <h4 class="text-center text-color mb-4">Добро пожаловать в нашу платформу для тестирования студентов!</h4>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    {% if request.user.is_authenticated and user.is_superuser %}
+
+    <div class="col-md-4 mb-5">
+      <a href="{% url 'new_block' %}">
+        <div class="card shadow">
+          <div class="card-body text-center">
+            <h5 class="card-title">&#9997; Создать блок</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    {% for el in info %}
+    <div class="col-md-4 mb-5">
+      <div class="card shadow d-flex flex-column justify-content-center align-items-center">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ el.NAME }}</h5>
+          <br>
+          <a href="{% url 'block' el.id %}" class="btn btn-primary">Перейти к тестам</a>
+          <br><br>
+          <form action="{% url 'delete_block' el.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="Удалить">
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    {% elif request.user.is_authenticated %}
+    {% for el in info %}
+    <div class="col-md-4 mb-5">
+      <div class="card shadow d-flex flex-column justify-content-center align-items-center">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ el.NAME }}</h5>
+          <br>
+          <a href="{% url 'block' el.id %}" class="btn btn-primary">Пройти тест</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <div class="col-md-12 mb-5">
+      <div class="card text-center">
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <div class="footer"> </div>
+</div>
+<style>
+.card {
+  height: 100%;
+  transition: transform 0.2s;
+}
+
+.container-fluid{
+background: #fff!important;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+background: #fff;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.zagolovok{
+ margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .card-title {
+    font-size: 1.2rem;
+  }
+}
+.messages {
+    margin: 10px;
+}
+
+.message {
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+}
+
+</style>
+
+
+{% endblock %}

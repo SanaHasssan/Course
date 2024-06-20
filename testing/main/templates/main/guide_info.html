@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ guide.NAME }}{% endblock %}
+
+{% block content %}
+<div class="guide-info">
+    <h1 style="text-align: center; margin: auto;">{{ guide_obj.NAME }}</h1>
+    <br>
+    <p class="guide-text" style="text-align: center; margin: auto;">{{ guide_obj.TEXT }}</p>
+    {% if guide_obj.LINK %}
+    <div class="guide-video">
+      <iframe  src="https://www.youtube.com/embed/{{ guide_obj.LINK }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+    {% endif %}
+    {% if guide_obj.photo %}
+    <div class="guide-image">
+      <img src="{{ guide_obj.photo.url }}" alt="{{ guide_obj.NAME }}">
+    </div>
+    {% endif %}
+</div>
+
+<style>
+  .guide-info {
+   text-align: left;
+
+  }
+
+  .guide-text {
+    font-size: 20px;
+    line-height: 1.5;
+    text-align: center;
+    color: #333;
+  }
+  .guide-video iframe,
+  .guide-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  .guide-video {
+    display: flex;
+    justify-content: center;
+  }
+  .guide-video iframe {
+    width: 80%;
+    height: 500px;
+    margin-top:1%;
+}
+</style>
+{% endblock %}

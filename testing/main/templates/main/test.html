@@ -1,0 +1,86 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Тест {% endblock %}
+
+{% block content%}
+
+
+<style>
+/* Стили для вопроса */
+.question {
+  margin: 0 auto;
+  width: 50%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+
+
+}
+
+.question h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  list-style-type: none;
+  font-size: 30px;
+}
+
+.question input[type="checkbox"] {
+  margin-right: 10px;
+  font-size: 18px;
+
+}
+
+/* Стили для кнопки */
+  button {
+    display: block;
+    margin: 20px auto 0; /* центрирование кнопки */
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  button:hover {
+    background-color: #3e8e41;
+  }
+
+
+</style>
+
+<form method="post">
+  {% csrf_token %}
+{% for question, options in question_data.items %}
+{% if options|length == 1 %}
+  <div class="question">
+    <h3>{{ question }}</h3>
+    <p>{{ options.0 }}</p>
+    <input type="text" name="{{ question }}[]" value="">
+  </div>
+{% else %}
+  <div class="question">
+    <h3>{{ question }}</h3>
+    <ul>
+      {% for option in options %}
+        <li>
+          <label>
+            <input type="checkbox" name="{{ question }}[]" value="{{ option }}">
+            {{ option }}
+          </label>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% endfor %}
+
+<button type="submit">Отправить</button>
+</form>
+
+
+
+{% endblock %}

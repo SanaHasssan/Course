@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ guide.NAME }}{% endblock %}
+
+{% block content %}
+<div class="guide-info">
+    <h1 style="text-align: center; margin: auto;">{{ guide.name }}</h1>
+    <br>
+    <p class="guide-text" style="text-align: center; margin: auto;">{{ guide.text }}</p>
+
+    {% if guide.photo %}
+    <img src="{{ guide.photo.url }}" alt="{{ guide.name }}">
+    {% endif %}
+
+    {% if guide.document %}
+    <a href="{{ guide.document.url }}" download class="download-button">СКАЧАТЬ МАТЕРИАЛ</a>
+    {% endif %}
+
+    <div style="text-align: center; margin: 50px auto;">
+        <a href="{% url 'tz_answer' guide.id %}"
+           style="background-color: #00a0e9; color: white; text-decoration: none; padding: 15px 30px; border-radius: 5px; display: inline-block;">ПРИСТУПИТЬ
+            К ЗАДАНИЮ</a>
+    </div>
+</div>
+
+
+<style>
+  .guide-info {
+    margin-left: 5%;
+.download-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #45a049;
+}
+
+.download-button:active {
+  background-color: #3e8742;
+  outline: none;
+}
+
+  }
+  .guide-text {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #333;
+  }
+  .guide-video iframe,
+  .guide-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  .guide-video {
+    display: flex;
+    justify-content: center;
+  }
+  .guide-video iframe {
+    width: 80%;
+    height: 500px;
+    margin-top:10%;
+}
+
+</style>
+{% endblock %}

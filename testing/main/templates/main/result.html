@@ -1,0 +1,337 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Результаты {% endblock %}
+
+{% block content%}
+
+<style> .guide{
+background:#D2D2D4;
+height: 25%;
+width: 15%;
+left:2.5%;
+border: 1px solid #0C151C;
+display:inline-block;
+font-size:30px;
+text-align: center;
+border-radius:12px;
+color:#0C151C!important;
+text-shadow: 1px 1px 1px #000;
+margin-left: 12px;
+margin-top: 15px;
+float: left;
+margin-right: 20px; /* добавляем отступ между блоками */
+}
+#creater{background: #6B99C3;
+color:#fff!important;
+}
+
+.slideT{background:#6B99C3;
+border-radius:12px;
+font-size:20px;
+text-align:center;
+}
+.container{
+display:inline-block;
+margin-left:-10%;
+}
+
+.container2{
+display:inline-block;
+height: 10%;
+width: 25%;
+}
+
+.strip {
+background-color: #fff!important;
+height: 50px;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+clear: both;
+margin-top: 10px; /* добавляем отступ сверху */
+}
+
+
+.strip h2 {
+margin: 0;
+font-size: 24px;
+color: #333;
+}
+.inp{
+position: absolute; bottom: 4px; left:30%; height:30px;
+border:1px solid;
+border-radius:12px;
+text-align: center;
+font-size: 20px;
+color: #fff;
+background-color: #800080;
+}
+
+.guide.pointer {
+width: 320px;
+height: 300px;
+display: flex;
+align-items: left;
+justify-content: center;
+border:1px solid #fff;
+margin-right: 12px;
+}
+
+.guide.pointer h5 {
+margin: 10px;
+padding: 0;
+font-size: 30px;
+text-align: center;
+margin-right: 12px;
+
+}
+.table-style {
+font-family: Arial, sans-serif;
+border-collapse: collapse;
+width: 90%;
+align-items: center;
+justify-content: center;
+margin-left: 65px;
+}
+
+.shapka{
+text-align: center;
+}
+
+.table-style td, .table-style th {
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+.table-style tr:nth-child(even){background-color: #f2f2f2;}
+
+.table-style th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: center;
+font-size: 20px;
+background-color: #007bff;
+color: white;
+}
+.tab-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background-color: #0056b3;
+}
+
+
+
+
+
+
+
+</style>
+
+{% if request.user.is_authenticated and user.is_superuser %}
+<div style="display: flex; justify-content: center;">
+    <button id="testsBtn" class="tab-button active" onclick="showTable('tests')">Пройденные тесты</button>
+    <button id="tasksBtn" class="tab-button" onclick="showTable('tasks')">Пройденные задания</button>
+</div>
+
+<div class="strip">
+    <h2>Пройденные тесты</h2>
+
+</div>
+
+<table id="testsTable" class="table-style">
+    <thead>
+    <tr class="shapka">
+        <th>Имя пользователя</th>
+        <th>ФИО</th>
+        <th>Название теста</th>
+        <th>Оценка</th>
+        <th>Результат</th>
+        <th>Дата</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for r in result1 %}
+    <tr>
+        <td>{{ r.name }}</td>
+        <td>{{ r.full_name }}</td>
+        <td>{{ r.test_name }}</td>
+        <td>{% if r.ball >= 86 %} ОТЛИЧНО {% elif r.ball >= 71 %} ХОРОШО {% elif r.ball >= 51 %} УДОВЛЕТВОРИТЕЛЬНО {% else %} НЕУДОВЛЕТВОРИТЕЛЬНО{% endif %}</td>
+        <td>{{ r.score }}</td>
+        <td>{{ r.date }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<table id="tasksTable" class="table-style" style="display: none;">
+    <thead>
+    <tr class="shapka">
+        <th>ID задания</th>
+        <th>Название</th>
+        <th>Пользователь</th>
+        <th>ФИО</th>
+        <th>Дата</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for r in result2 %}
+    <tr onclick="window.location.href = '{% url 'look_tz' r.id %}';">
+        <td>{{ r.id_tz }}</td>
+        <td>{{ r.name_tz }}</td>
+        <td>{{ r.user }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.uploaded_at }}</td>
+
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% elif request.user.is_authenticated %}
+<div class="strip">
+    <h2>Пройденные тесты</h2>
+</div>
+
+<div class="container my-5 ">
+    <div class="row justify-content-center">
+        <div class="d-flex flex-wrap">
+            {% for el in result1 %}
+            <div class="guide pointer text-center m-2 p-5 " style="background-color: {% if el.score >= 70 %} #3CB371;
+                {% elif el.score >= 50 %} #F4A460;
+                {% else %} #FF6347; {% endif %}{% if el.score >= 50 %} color: #fff; {% endif %}">
+                <h5 class="homs">{{el.test_name}} <br> {{el.score}}%</h5>
+            </div>
+            {% endfor %}
+            <style>.divider {
+  height: 2px;
+  width: 100%;
+  background-color: #000;
+  margin-top: 20px;
+}
+</style>
+            <div class="divider"></div>
+            <div class="strip">
+    <h2>Пройденные задания</h2>
+</div>
+
+            {% for el in result2 %}
+                <div class="guide pointer text-center m-2 p-5" style="background-color: #3CB371;">
+                    <h5 class="homs">{{el.name_tz}} <br> ЗАЧЁТ</h5>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endif %}
+
+
+<style>
+.strip {
+background-color: #007bff;
+color: #fff;
+padding: 20px;
+margin-bottom: 20px;
+}
+
+.guide {
+border-radius: 10px;
+padding: 20px;
+color: #fff;
+cursor: pointer;
+transition: transform 0.2s;
+}
+
+.guide:hover {
+transform: translateY(-5px);
+}
+
+.homs {
+font-size: 1.5rem;
+margin-bottom: 0;
+text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+.homs {
+font-size: 1.2rem;
+}
+}
+
+
+
+
+
+</style>
+
+
+<style>
+    tr:hover {
+        cursor: pointer;
+    }
+
+
+.guide {
+height: 100%;
+transition: transform 0.2s;
+border-radius: 10px;
+}
+
+.guide:hover {
+transform: translateY(-5px);
+}
+
+.homs {
+margin-top: 1rem;
+font-size: 1.5rem;
+color: white;
+}
+
+@media screen and (max-width: 768px) {
+.homs {
+font-size: 1.2rem;
+}
+}
+
+
+
+
+
+</style>
+<script>
+    function showTable(table) {
+  if (table === 'tests') {
+    document.getElementById('testsTable').style.display = 'table';
+    document.getElementById('tasksTable').style.display = 'none';
+    document.getElementById('testsBtn').classList.add('active');
+    document.getElementById('tasksBtn').classList.remove('active');
+  } else if (table === 'tasks') {
+    document.getElementById('testsTable').style.display = 'none';
+    document.getElementById('tasksTable').style.display = 'table';
+    document.getElementById('testsBtn').classList.remove('active');
+    document.getElementById('tasksBtn').classList.add('active');
+  }
+}
+
+// По умолчанию отобразить таблицу Пройденные тесты
+showTable('tests');
+
+
+
+
+
+</script>
+
+{% endblock %}

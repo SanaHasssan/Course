@@ -1,0 +1,107 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Создание справочного материала {% endblock %}
+
+{% block content%}
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.NAME.label_tag }}
+            {{ form.NAME }}
+        </div>
+        <div class="form-group">
+            {{ form.TEXT.label_tag }}
+            {{ form.TEXT }}
+        </div>
+        <div class="form-group">
+            {{ form.LINK.label_tag }}
+            {{ form.LINK }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            {{ form.file.label_tag }}
+            {{ form.file }}
+        </div>
+        <div class="form-group">
+            {{ form.youtube_link.label_tag }}
+            {{ form.youtube_link }}
+        </div>
+        <div class="form-group">
+            {{ form.photo.label_tag }}
+            {{ form.photo }}
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+</div>
+
+
+<style>
+.form-group {
+margin-bottom: 2rem;
+}
+.container {
+max-width: 800px;
+margin: 0 auto;
+}
+
+textarea.form-control {
+height: 12rem;
+font-size: 1.2rem;
+border-radius: 0;
+padding: 1rem;
+margin-bottom: 1rem;
+width: 100%;
+max-width: 100%;
+}
+
+
+input[type="text"].form-control {
+height: 3rem;
+font-size: 1.2rem;
+border-radius: 0;
+}
+
+textarea.form-control {
+height: 12rem;
+font-size: 1.2rem;
+border-radius: 0;
+}
+
+.btn-primary {
+background-color: #007bff;
+border-color: #007bff;
+border-radius: 0;
+background-color: #007bff;
+color: #fff;
+font-size: 18px;
+padding: 10px 20px;
+border-radius: 5px;
+margin-top: 20px;
+position: relative;
+left: 50%;
+transform: translate(-50%, 0);
+}
+form {
+  width: 100%;
+  margin-left: 90px;
+  margin-bottom: 190px;
+  padding: 50px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-primary:hover {
+background-color: #0069d9;
+border-color: #0062cc;
+}
+
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Рейтинг {% endblock %}
+
+{% block content %}
+  <style>
+    .rating-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      height: 100vh;
+    }
+
+    .rating-container ol {
+      list-style: none;
+      padding: 0;
+    }
+
+    .rating-container li {
+      background: linear-gradient(to right, #ffafbd, #ffc3a0);
+      color: #fff;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 0.5rem;
+      box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .rating-container li:nth-child(1),
+    .rating-container li:nth-child(2),
+    .rating-container li:nth-child(3) {
+      background: linear-gradient(to right, #11998e, #38ef7d);
+      font-size: 2rem;
+    }
+    .texttop{
+    margin-bottom:230px;
+    }
+  </style>
+
+{% if request.user.is_authenticated %}
+  <div class="rating-container">
+    <h1>Топ 5 пользователей</h1>
+    <ol>
+      {% for user in top_users %}
+        <li {% if forloop.counter <= 3 %} class="top-3" {% endif %}>
+          {{ user.name }}: {{ user.score }}
+        </li>
+      {% endfor %}
+    </ol>
+    {% if current_user_position %}
+      {% if current_user_position in posit %}
+        <p class="texttop">Вы вошли в топ-5! Ваша позиция: {{ current_user_position }}</p>
+      {% else %}
+        <p>Вы не вошли в топ-5! Ваша позиция: {{ current_user_position }}</p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% else %}
+{% endif %}
+{% endblock %}

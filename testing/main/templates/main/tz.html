@@ -1,0 +1,282 @@
+{% extends 'main/base.html' %}
+
+{% block title%} Справочники {% endblock %}
+
+{% block content%}
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if request.user.is_authenticated and user.is_superuser %}
+
+<a href="{% url 'new_tz' %}">
+    <div class="create-guide">
+        <h6 class="create-guide-icon">&#9997;</h6>
+        <h4 class="create-guide-title">Создать задание</h4>
+    </div>
+</a>
+
+{% for el in info %}
+<a class="guide-container {% if el.FLAG == 2 or el.FLAG == 3 %}disabled{% endif %}" href="{% url 'tz_detail' el.id %}"
+   target="_blank">
+    <div class="guide {% if el.FLAG == 1 %}not-pass{% elif el.FLAG == 2 %}not-approved{% endif %}">
+        <h5 class="guide-title">{{el.name}}</h5>
+        {% if el.FLAG == 1 %}
+        <div class="not-pass-badge">НЕЗАЧЁТ</div>
+        {% elif el.FLAG == 2 %}
+        <div class="not-approved-badge">ЗАЧЁТ</div>
+        {% endif %}
+        <form action="{% url 'delete_tz' el.id %}" method="post">
+            {% csrf_token %}
+            <button class="delete-guide-btn" type="submit">Удалить задание</button>
+        </form>
+    </div>
+</a>
+{% endfor %}
+
+
+{% elif request.user.is_authenticated  %}
+{% for el in info %}
+<a class="guide-container {% if el.FLAG == 2 or el.FLAG == 3 %}disabled{% endif %}" href="{% url 'tz_detail' el.id %}"
+   target="_blank">
+    <div class="guide {% if el.FLAG == 1 %}not-pass{% elif el.FLAG == 2 %}not-approved{% endif %}">
+        <h5 class="guide-title">{{el.name}}</h5>
+        {% if el.FLAG == 1 %}
+        <div class="not-pass-badge">НЕЗАЧЁТ</div>
+        {% elif el.FLAG == 2 %}
+        <div class="not-approved-badge">ЗАЧЁТ</div>
+        {% endif %}
+    </div>
+</a>
+{% endfor %}
+{% for tz_answer in tz_answers %}
+{% if tz_answer.FLAG == 2 %}
+
+<a class="guide-container" href="{% url 'tz_detail' tz_answer.id_tz %}" target="_blank">
+    <div class="guide {% if tz_answer.FLAG == 2 %}not-approved{% elif tz_answer.FLAG == 3 %}waiting{% endif %}">
+        <h5 class="guide-title">{{tz_answer.name_tz}}</h5>
+
+        <div class="not-approved-badge">НЕЗАЧЁТ. Перерешайте.</div>
+
+        <div class="waiting-badge">Ожидание проверки</div>
+    </div>
+</a>
+{% elif tz_answer.FLAG == 3 %}
+<div class="guide-container">
+    <div class="guide {% if tz_answer.FLAG == 2 %}not-approved{% elif tz_answer.FLAG == 3 %}waiting{% endif %}">
+        <h5 class="guide-title">{{tz_answer.name_tz}}</h5>
+
+
+        <div class="waiting-badge">Ожидание проверки</div>
+    </div>
+</div>
+{%else%}
+<a class="guide-container" href="{% url 'tz_detail' el.id %}" target="_blank">
+    <div class="guide">
+        <h5 class="guide-title">{{el.name}}</h5>
+    </div>
+</a>
+{% endif %}
+{% endfor %}
+
+{% else %}
+
+{% for el in info %}
+<div class="container2">
+    <div class="guide pointer">
+        <h5 class="homs">{{el.name}}</h5>
+        <div class="slideT" style="display: block; overflow: hidden;">
+            {{el.text}}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endif %}
+
+<script>
+    $(document).ready(function(){
+        $(".slideT").hide();
+        $(".pointer").click(function () {
+            $(this).children().toggle("slow");
+        });
+    });
+
+
+
+
+</script>
+
+<style>
+    .create-guide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        height: 150px;
+        margin-bottom: 30px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+
+    }
+
+    .create-guide:hover {
+        background-color: #f0f0f0;
+
+    }
+
+    .create-guide-icon {
+        font-size: 50px;
+        color: #111;
+        margin-bottom: 10px;
+
+    }
+
+    .create-guide-title {
+        font-size: 24px;
+        color: #111;
+        margin: 0;
+
+    }
+
+    .guide-container {
+        display: block;
+        margin-bottom: 30px;
+        text-decoration: none;
+        color: #111;
+        margin-left:170px;
+    }
+
+    .guide {
+        position: relative;
+        width: 80%;
+        height: 100px;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .not-pass {
+        background-color: #FFCCCC;
+    }
+
+    .not-approved {
+        background-color: #ffc0cb;
+    }
+
+    .waiting {
+        background-color: #FFFFCC;
+    }
+
+    .guide:hover {
+        background-color: #f0f0f0;
+    }
+
+    .guide-title {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .not-pass-badge {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        background-color: #FF0000;
+        color: #FFFFFF;
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    .not-approved-badge {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        background-color: #ff9baa;
+        color: #FFFFFF;
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    .waiting-badge {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        background-color: #FFFF00;
+        color: #000000;
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    .delete-guide-btn {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        background-color: #f44336;
+        border: none;
+        color: #fff;
+        padding: 8px 16px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s
+ease-in-out;
+}
+
+
+.delete-guide-btn:hover {
+    background-color: #d32f2f;
+}
+
+.guide-container:last-child {
+    margin-bottom: 0;
+}
+
+.container2 {
+    margin-bottom: 30px;
+}
+
+.homs {
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.pointer:hover {
+    background-color: #f0f0f0;
+}
+
+.slideT {
+    margin-top: 10px;
+}
+
+.messages {
+    margin: 10px;
+}
+
+.message {
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+}
+
+
+
+</style>
+{% endblock %}

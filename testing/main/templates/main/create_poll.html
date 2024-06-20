@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Опрос{% endblock %}
+
+{% block content %}
+<style>
+    /* Пример стилей */
+    .create-poll-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .create-poll-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .create-poll-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .create-poll-label {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .create-poll-input {
+        width: 300px;
+        height: 30px;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .create-poll-submit-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .create-poll-submit-btn:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="create-poll-container">
+    <h2 class="create-poll-heading">Создать опрос</h2>
+
+    <form class="create-poll-form" method="post" action="{% url 'create_poll' %}">
+        {% csrf_token %}
+        <label class="create-poll-label" for="{{ form.question_text.id_for_label }}">Вопрос:</label>
+        {{ form.question_text }}<br>
+
+        <label class="create-poll-label" for="{{ form.choices.id_for_label }}">Варианты ответов (на новой строке):</label>
+        {{ form.choices }}<br>
+
+        <button class="create-poll-submit-btn" type="submit">Создать</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Просмотр задания{% endblock %}
+
+{% block content %}
+  <div class="page-container">
+    <div class="page-content">
+      <h1 class="page-title">{{ page.name_tz }}</h1>
+      <p class="uploaded-date">Дата загрузки: {{ page.uploaded_at }}</p>
+      <p class="name">ФИО: {{ page.name }}</p>
+      <p class="comments">Комментарии к заданию:</p>
+      <p class="text">{{ page.text }}</p>
+
+      {% if page.document %}
+        <p class="download-link"><a href="{{ page.document.url }}">Скачать документ</a></p>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id_tz" value="{{ page.id_tz }}">
+        <input type="submit" name="submit" value="Зачёт">
+        <input type="submit" name="submit" value="Незачёт">
+      </form>
+    </div>
+  </div>
+
+<style>.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f8ff; /* Голубой цвет фона */
+}
+
+.page-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 20px;
+  border:blue 1px solid;
+  background-color: #ffffff; /* Белый цвет фона */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+}
+
+.page-title {
+  font-size: 28px;
+  color: #0047ab; /* Голубой цвет заголовка */
+}
+
+.uploaded-date,
+.name {
+  font-size: 18px;
+  color: #333333; /* Черный цвет текста */
+  margin-bottom: 10px;
+}
+
+.comments {
+  font-size: 20px;
+  color: #0047ab; /* Голубой цвет заголовка комментариев */
+  margin-bottom: 5px;
+}
+
+.text {
+  font-size: 16px;
+  color: #666666; /* Серый цвет текста */
+}
+
+.download-link a {
+  color: #0047ab; /* Голубой цвет ссылки */
+  text-decoration: none;
+}
+
+.download-link a:hover {
+  text-decoration: underline;
+}
+
+/* Добавление анимации */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-container {
+  animation: fade-in 1s;
+}
+</style>
+{% endblock %}

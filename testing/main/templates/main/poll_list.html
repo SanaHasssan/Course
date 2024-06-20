@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Опрос {% endblock %}
+
+{% block content %}
+<style>
+    /* Пример стилей */
+    .poll-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .poll-item {
+        width: 300px;
+        height: 200px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .poll-item:hover {
+        transform: scale(1.1);
+    }
+
+    .create-poll-button {
+        margin-top: 20px;
+    }
+</style>
+
+{% if request.user.is_authenticated and request.user.is_staff %}
+    <a href="{% url 'create_poll' %}" class="btn btn-primary create-poll-button">Создать опрос</a>
+{% endif %}
+
+<div class="poll-list">
+    {% for poll in polls %}
+        <div class="poll-item">
+            <a href="{% url 'poll_detail' poll.id %}">{{ poll.question_text }}</a>
+        </div>
+    {% empty %}
+        <p>Нет доступных опросов.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
